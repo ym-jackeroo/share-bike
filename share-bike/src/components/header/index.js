@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import {Link} from 'react-router-dom'
 import './index.less'
 import {formatDate, fgh} from '../../utils'
+import {connect} from 'react-redux'
 // import axios from 'axios'
 
 class Header extends Component {
@@ -26,7 +27,6 @@ class Header extends Component {
 
     getWeather = () => {
         fgh.get('http://t.weather.sojson.com/api/weather/city/101010100').then(res => {
-            console.log(res)
             let weather = res.data.data.forecast[0]
             let weatherStr = `${weather.low}~${weather.high} ${weather.fx}${weather.fl}`
             this.setState({
@@ -53,7 +53,7 @@ class Header extends Component {
                 </div>
                 <div className="weather-wrap clearfix">
                     <div className="breadcrumb fll">
-                        首页
+                        {this.props.menuText.menuItemText}
                     </div>
                     <div className="weather flr clearfix">
                         <div className="date fll">
@@ -69,4 +69,10 @@ class Header extends Component {
     }
 }
 
-export default Header;
+export default connect(
+    function mapStateToProps(state) {
+        return {
+            menuText: state
+        }
+    }
+)(Header);
